@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,11 +7,7 @@
 @layer base {
   :root {
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-geist: 'Geist', system-ui, sans-serif;
-    --font-geist-mono: 'Geist Mono', monospace;
-    --font-mona: 'Mona Sans', system-ui, sans-serif;
-    --font-ibm-plex: 'IBM Plex Sans', system-ui, sans-serif;
-    --font-manrope: 'Manrope', system-ui, sans-serif;
+    --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   }
 
   html {
@@ -18,29 +16,38 @@
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased bg-[#0B0B0F];
   }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
 @layer utilities {
-  .animate-in {
-    animation-name: animateIn;
-    animation-duration: 350ms;
-    --tw-enter-opacity: initial;
-    --tw-enter-scale: initial;
-    --tw-enter-rotate: initial;
-    --tw-enter-translate-x: initial;
-    --tw-enter-translate-y: initial;
-  }
+  .font-heading { font-family: var(--font-heading); }
 
-  .animate-out {
-    animation-name: animateOut;
-    animation-duration: 350ms;
-    --tw-exit-opacity: initial;
-    --tw-exit-scale: initial;
-    --tw-exit-rotate: initial;
-    --tw-exit-translate-x: initial;
-    --tw-exit-translate-y: initial;
-  }
+  .glow { box-shadow: 0 0 0 0 rgba(57,255,136,0.0); transition: box-shadow .25s ease; }
+  .glow:hover { box-shadow: 0 0 32px 4px rgba(57,255,136,0.35); }
+
+  /* Equalizer bars */
+  .animate-eq { animation: eq 1.25s ease-in-out infinite alternate; }
+  .animate-eq:nth-child(3n) { animation-duration: 1.05s; }
+  .animate-eq:nth-child(4n) { animation-duration: 1.5s; }
+  .animate-eq:nth-child(5n) { animation-duration: 0.9s; }
+  @keyframes eq { from { transform: scaleY(0.4); } to { transform: scaleY(1); } }
+
+  /* Spinning vinyl */
+  .animate-spin-slow { animation: spin 12s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Drawn waveform */
+  .animate-draw { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: draw 2.8s ease forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .path-glow { filter: drop-shadow(0 0 14px rgba(57,255,136,0.35)); }
+
+  /* Rising bars subtle float */
+  .animate-rise { animation: rise 2.2s ease-in-out infinite; }
+  .animate-rise:nth-child(odd) { animation-duration: 1.8s; }
+  @keyframes rise { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6%); } }
+
+  /* Marquee */
+  .marquee { width: max-content; animation: marquee 18s linear infinite; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 }
