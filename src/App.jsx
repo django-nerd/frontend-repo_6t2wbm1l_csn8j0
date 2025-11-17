@@ -1,262 +1,250 @@
 import React from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle2, Music2, BarChart3, HeartHandshake, Sparkles } from 'lucide-react'
+import { PlayCircle, ArrowRight, CheckCircle2, BarChart3, Headphones, Disc, PieChart, LineChart, Download, Music } from 'lucide-react'
 
-// Pastel Creative palette
-const palette = {
-  coral: '#F7AFA7', // Soft Coral
-  sand: '#E7D8C9',  // Muted Sand
-  charcoal: '#2B2B2B', // Warm Charcoal
-  white: '#FFFFFF'
+// Palette helpers from CSS variables
+const PALETTE = {
+  coral: 'var(--soft-coral)',
+  sand: 'var(--muted-sand)',
+  charcoal: 'var(--warm-charcoal)',
+  mint: 'var(--pastel-mint)',
+  sage: 'var(--pale-sage)',
+  peach: 'var(--soft-peach)',
+  teal: 'var(--muted-teal)',
+  gold: 'var(--warm-gold)',
+  terra: 'var(--soft-terracotta)'
 }
 
 const Container = ({ children, className = '' }) => (
   <div className={`mx-auto max-w-6xl px-4 ${className}`}>{children}</div>
 )
 
-const Section = ({ children, className = '', id }) => (
-  <section id={id} className={`w-full ${className}`}>{children}</section>
-)
+const SoftButton = ({ children, href = '#', variant = 'primary', icon: Icon }) => {
+  const base = 'inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium hover-lift focus:outline-none focus:ring-2 focus:ring-black/5';
+  if (variant === 'primary') {
+    return (
+      <a href={href} className={base} style={{ background: PALETTE.mint, color: PALETTE.charcoal }}>
+        {Icon ? <Icon className="size-4" /> : null}
+        {children}
+      </a>
+    )
+  }
+  if (variant === 'secondary') {
+    return (
+      <a href={href} className={base} style={{ background: '#F4F0EA', color: PALETTE.charcoal, border: '1px solid rgba(0,0,0,0.06)' }}>
+        {Icon ? <Icon className="size-4" /> : null}
+        {children}
+      </a>
+    )
+  }
+  return (
+    <a href={href} className={base} style={{ color: PALETTE.charcoal }}>
+      {Icon ? <Icon className="size-4" /> : null}
+      {children}
+    </a>
+  )
+}
 
 const Card = ({ children, className = '' }) => (
-  <div className={`rounded-2xl bg-white/70 backdrop-blur-sm border border-black/5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] ${className}`}>
-    {children}
-  </div>
+  <div className={`soft-card bg-white/60 backdrop-blur-sm border border-black/5 ${className}`}>{children}</div>
 )
 
-const Pill = ({ children, className = '' }) => (
-  <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium bg-black/5 text-[${palette.charcoal}] border border-black/10 ${className}`}>
-    {children}
-  </span>
+const Header = () => (
+  <header className="sticky top-0 z-30 bg-[rgba(231,216,201,0.7)] backdrop-blur-md border-b border-black/5">
+    <Container className="py-4 flex items-center justify-between">
+      <a href="#" className="flex items-center gap-3">
+        <div className="size-8 rounded-xl" style={{ background: `linear-gradient(135deg, ${PALETTE.peach}, ${PALETTE.mint})` }} />
+        <span className="font-semibold tracking-wide" style={{ color: PALETTE.charcoal }}>BeatAlytics</span>
+      </a>
+      <nav className="hidden md:flex items-center gap-6 text-sm" style={{ color: 'rgba(43,43,43,0.75)' }}>
+        <a href="#features" className="hover:opacity-100 opacity-80">Features</a>
+        <a href="#pricing" className="hover:opacity-100 opacity-80">Pricing</a>
+        <a href="#faq" className="hover:opacity-100 opacity-80">FAQ</a>
+      </nav>
+      <SoftButton href="#start" variant="primary" icon={ArrowRight}>Start free</SoftButton>
+    </Container>
+  </header>
+)
+
+const Hero = () => (
+  <section className="relative overflow-hidden">
+    <div className="absolute inset-0 bg-sunset opacity-[0.35]" />
+    <div className="absolute inset-0 grain" />
+    <Container className="relative py-16 md:py-24">
+      <div className="max-w-3xl">
+        <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs" style={{ background: '#F4F0EA', color: 'rgba(43,43,43,0.8)', border: '1px solid rgba(0,0,0,0.06)' }}>
+          <Headphones className="size-3.5" />
+          Built by producers, for producers
+        </div>
+        <h1 className="mt-5 text-4xl md:text-6xl font-heading font-bold leading-[1.05] tracking-wide" style={{ color: PALETTE.charcoal }}>
+          Calm, honest analytics for your beats
+        </h1>
+        <p className="mt-4 text-lg text-[rgba(43,43,43,0.75)] max-w-2xl">
+          Keep your workflow simple. Connect sales, streams, and traffic in one friendly place. No noise. Just the numbers that matter.
+        </p>
+        <div className="mt-8 flex items-center gap-3">
+          <SoftButton href="#start" variant="primary" icon={ArrowRight}>Start free</SoftButton>
+          <SoftButton href="#demo" variant="secondary" icon={PlayCircle}>Watch demo</SoftButton>
+        </div>
+      </div>
+
+      {/* Minimal waveform */}
+      <div className="mt-14">
+        <Card className="p-6">
+          <div className="text-sm mb-3" style={{ color: 'rgba(43,43,43,0.7)' }}>Last 30 days</div>
+          <div className="h-28 w-full relative">
+            <svg viewBox="0 0 600 120" className="absolute inset-0 w-full h-full">
+              <defs>
+                <linearGradient id="glow" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0%" stopColor={getComputedStyle(document.documentElement).getPropertyValue('--soft-peach') || '#FFD9C2'} />
+                  <stop offset="100%" stopColor={getComputedStyle(document.documentElement).getPropertyValue('--pastel-mint') || '#CDEFE2'} />
+                </linearGradient>
+              </defs>
+              <path d="M0,80 C60,40 120,95 180,70 C240,45 300,95 360,65 C420,35 480,95 540,60 C560,52 580,56 600,50" fill="none" stroke="url(#glow)" strokeWidth="3" className="line-glow" />
+            </svg>
+          </div>
+        </Card>
+      </div>
+    </Container>
+  </section>
+)
+
+const PadsGrid = () => (
+  <section id="features" className="py-16">
+    <Container>
+      <div className="grid md:grid-cols-3 gap-6">
+        {[
+          { title: 'Simple sales view', desc: 'See revenue and top beats at a glance — no dashboards to learn.', icon: BarChart3 },
+          { title: 'Where fans find you', desc: 'Understand which platform and country are showing love.', icon: PieChart },
+          { title: 'Exports that work', desc: 'Download CSVs your team can actually use.', icon: Download },
+        ].map((f, i) => (
+          <Card key={i} className="p-6 hover-lift">
+            <div className="flex items-center gap-3">
+              <div className="size-9 rounded-xl flex items-center justify-center" style={{ background: PALETTE.mint }}>
+                <f.icon className="size-5" style={{ color: PALETTE.charcoal }} />
+              </div>
+              <h3 className="font-heading font-semibold" style={{ color: PALETTE.charcoal }}>{f.title}</h3>
+            </div>
+            <p className="mt-3 text-sm" style={{ color: 'rgba(43,43,43,0.75)' }}>{f.desc}</p>
+          </Card>
+        ))}
+      </div>
+    </Container>
+  </section>
+)
+
+const GentleStats = () => (
+  <section className="py-4">
+    <Container>
+      <Card className="p-6">
+        <div className="grid sm:grid-cols-3 gap-6">
+          {[
+            { k: 'Monthly Revenue', v: '$2,340' },
+            { k: 'Top Beat', v: 'Sunset Pads' },
+            { k: 'New Fans', v: '+612' },
+          ].map((s, i) => (
+            <div key={i}>
+              <div className="text-xs uppercase tracking-wide" style={{ color: 'rgba(43,43,43,0.55)' }}>{s.k}</div>
+              <div className="mt-1 text-2xl font-heading font-semibold" style={{ color: PALETTE.charcoal }}>{s.v}</div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </Container>
+  </section>
+)
+
+const Pricing = () => (
+  <section id="pricing" className="py-20">
+    <Container>
+      <div className="text-center max-w-2xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-heading font-bold" style={{ color: PALETTE.charcoal }}>Creator-friendly pricing</h2>
+        <p className="mt-3" style={{ color: 'rgba(43,43,43,0.75)' }}>Start free. Upgrade when you want more detail. No contracts, no stress.</p>
+      </div>
+      <div className="grid md:grid-cols-3 gap-6 mt-10">
+        {[
+          { name: 'Free', price: '$0', cta: 'Get started', features: ['Connect 1 platform', '7‑day trends', 'Basic exports'] },
+          { name: 'Pro', price: '$19/mo', cta: 'Go Pro', featured: true, features: ['All platforms', '30‑day insights', 'Priority support'] },
+          { name: 'Studio', price: '$39/mo', cta: 'For studios', features: ['Team seats', 'Unlimited exports', 'CSV + JSON API'] },
+        ].map((p, i) => (
+          <div key={i} className={`soft-card-lg overflow-hidden ${p.featured ? '' : ''}`} style={{ background: p.featured ? 'linear-gradient(135deg, var(--soft-peach), var(--pastel-mint))' : 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.06)' }}>
+            <div className="p-6">
+              <div className="text-sm mb-1" style={{ color: 'rgba(43,43,43,0.6)' }}>{p.name}</div>
+              <div className="text-3xl font-heading font-bold" style={{ color: PALETTE.charcoal }}>{p.price}</div>
+              <ul className="mt-4 space-y-2 text-sm" style={{ color: 'rgba(43,43,43,0.75)' }}>
+                {p.features.map((f, idx) => (
+                  <li key={idx} className="flex items-center gap-2"><CheckCircle2 className="size-4" style={{ color: PALETTE.teal }} />{f}</li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                <SoftButton href="#start" variant={p.featured ? 'primary' : 'secondary'}>{p.cta}</SoftButton>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+)
+
+const FinalCTA = () => (
+  <section className="py-20 relative">
+    <div className="absolute inset-0 bg-mint opacity-60" />
+    <div className="absolute inset-0 grain" />
+    <Container className="relative text-center">
+      <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs" style={{ background: '#F4F0EA', color: 'rgba(43,43,43,0.8)', border: '1px solid rgba(0,0,0,0.06)' }}>
+        <Music className="size-3.5" /> Let the music lead, we handle the numbers
+      </div>
+      <h3 className="mt-4 text-3xl md:text-4xl font-heading font-bold" style={{ color: PALETTE.charcoal }}>Plug in your catalogs and keep it moving</h3>
+      <p className="mt-3 max-w-2xl mx-auto" style={{ color: 'rgba(43,43,43,0.75)' }}>Connect once and see clear insights roll in: what’s selling, where fans come from, and when to drop next.</p>
+      <div className="mt-8 flex items-center justify-center gap-3">
+        <SoftButton href="#start" variant="primary" icon={ArrowRight}>Start free</SoftButton>
+        <SoftButton href="#demo" variant="secondary" icon={PlayCircle}>Watch demo</SoftButton>
+      </div>
+    </Container>
+  </section>
+)
+
+const Footer = () => (
+  <footer className="py-10 border-t border-black/5">
+    <Container className="grid md:grid-cols-4 gap-8">
+      <div className="md:col-span-2">
+        <div className="flex items-center gap-3">
+          <div className="size-8 rounded-xl" style={{ background: `linear-gradient(135deg, ${PALETTE.peach}, ${PALETTE.mint})` }} />
+          <span className="font-semibold" style={{ color: PALETTE.charcoal }}>BeatAlytics</span>
+        </div>
+        <p className="mt-3 text-sm" style={{ color: 'rgba(43,43,43,0.7)' }}>
+          Analytics with a producer’s touch — soft, clear, and genuinely helpful.
+        </p>
+      </div>
+      <div>
+        <div className="text-sm font-semibold" style={{ color: PALETTE.charcoal }}>Product</div>
+        <ul className="mt-2 text-sm" style={{ color: 'rgba(43,43,43,0.75)' }}>
+          <li><a href="#features" className="hover:opacity-100 opacity-80">Features</a></li>
+          <li><a href="#pricing" className="hover:opacity-100 opacity-80">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <div className="text-sm font-semibold" style={{ color: PALETTE.charcoal }}>Company</div>
+        <ul className="mt-2 text-sm" style={{ color: 'rgba(43,43,43,0.75)' }}>
+          <li><a href="#" className="hover:opacity-100 opacity-80">Contact</a></li>
+          <li><a href="#" className="hover:opacity-100 opacity-80">Privacy</a></li>
+        </ul>
+      </div>
+    </Container>
+    <div className="mt-8 text-center text-xs" style={{ color: 'rgba(43,43,43,0.6)' }}>© {new Date().getFullYear()} BeatAlytics</div>
+  </footer>
 )
 
 function App() {
   return (
-    <div className="min-h-screen w-full" style={{ background: palette.sand, color: palette.charcoal }}>
-      {/* Header */}
-      <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-[rgba(231,216,201,0.6)] border-b border-black/10">
-        <Container className="py-4 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-3">
-            <div className="size-8 rounded-md" style={{ background: palette.coral }} />
-            <span className="font-heading font-semibold tracking-wide">BeatAlytics</span>
-          </a>
-          <nav className="hidden md:flex items-center gap-6 text-sm opacity-80">
-            <a href="#how" className="hover:opacity-100">How it works</a>
-            <a href="#features" className="hover:opacity-100">Features</a>
-            <a href="#pricing" className="hover:opacity-100">Pricing</a>
-          </nav>
-          <a href="#cta" className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold" style={{ background: palette.coral, color: palette.charcoal }}>
-            Get started <ArrowRight className="size-4" />
-          </a>
-        </Container>
-      </header>
-
-      {/* Hero */}
-      <Section id="hero" className="pt-12 md:pt-20">
-        <Container className="grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <Pill className="bg-white/60">A calm home for your music data</Pill>
-            <h1 className="mt-4 text-4xl md:text-5xl font-heading font-bold leading-[1.1]">
-              Analytics for producers, designed like a sketchbook
-            </h1>
-            <p className="mt-3 text-base md:text-lg opacity-80 max-w-xl">
-              Keep tabs on sales, listeners, and growth—without the noise. BeatAlytics pairs studio‑friendly design with clear insights you can act on.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <a href="#cta" className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-base font-semibold" style={{ background: palette.coral, color: palette.charcoal }}>
-                Start free <ArrowRight className="size-4" />
-              </a>
-              <a href="#how" className="inline-flex items-center gap-2 rounded-full px-6 py-3 border border-black/10 bg-white/50">
-                See how it works
-              </a>
-            </div>
-            <div className="mt-5 flex items-center gap-3 text-sm opacity-80">
-              <CheckCircle2 className="size-4" /> No credit card
-              <CheckCircle2 className="size-4" /> Cancel anytime
-            </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <Card className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="size-10 rounded-lg" style={{ background: palette.coral }} />
-                <div>
-                  <div className="font-semibold">Weekly snapshot</div>
-                  <div className="text-sm opacity-70">A gentle overview of what moved</div>
-                </div>
-              </div>
-              <div className="mt-5 grid grid-cols-3 gap-4">
-                {[
-                  { label: 'Sales', value: '$1,240' },
-                  { label: 'Listeners', value: '8.2k' },
-                  { label: 'Top country', value: 'US' }
-                ].map((m, i) => (
-                  <div key={i} className="rounded-xl border border-black/10 bg-white/60 p-4">
-                    <div className="text-xs opacity-70">{m.label}</div>
-                    <div className="text-lg font-semibold mt-1">{m.value}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 rounded-xl border border-black/10 bg-white/60 p-4">
-                <div className="text-sm font-medium mb-2">Recent beats</div>
-                <div className="space-y-2">
-                  {['Dusty Pads', 'Sunset Lo‑Fi', 'Corner Booth'].map((n, i) => (
-                    <div key={i} className="flex items-center justify-between rounded-lg bg-white/70 border border-black/10 px-3 py-2">
-                      <span className="flex items-center gap-2"><Music2 className="size-4 opacity-70" /> {n}</span>
-                      <span className="text-xs opacity-70">steady</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-        </Container>
-      </Section>
-
-      {/* How it works */}
-      <Section id="how" className="py-14 md:py-16">
-        <Container>
-          <div className="text-center">
-            <h2 className="text-2xl md:text-3xl font-heading font-semibold">Simple flow, clear picture</h2>
-            <p className="mt-2 opacity-80 max-w-2xl mx-auto">Connect the platforms you already use, and we quietly organize your data. You get calm, helpful summaries—no dashboards to wrestle with.</p>
-          </div>
-          <div className="mt-8 grid md:grid-cols-3 gap-6">
-            {[
-              { icon: HeartHandshake, title: 'Connect', copy: 'BeatStars, YouTube, SoundCloud, more.' },
-              { icon: BarChart3, title: 'See patterns', copy: 'Sales, audience, and timing at a glance.' },
-              { icon: Sparkles, title: 'Act', copy: 'Release with confidence, price smart, promote where it matters.' }
-            ].map((s, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}>
-                <Card className="p-6 h-full">
-                  <div className="size-10 rounded-md flex items-center justify-center mb-3" style={{ background: palette.coral }}>
-                    <s.icon className="size-5" />
-                  </div>
-                  <div className="font-semibold">{s.title}</div>
-                  <p className="text-sm opacity-80 mt-1">{s.copy}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Features */}
-      <Section id="features" className="py-8 md:py-10">
-        <Container>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="p-6">
-              <div className="font-semibold">Creator‑friendly by design</div>
-              <p className="opacity-80 mt-1">Soft colors, clean layout, and humane copy. Nothing shouts. Everything helps.</p>
-              <ul className="mt-4 space-y-2 text-sm">
-                {['Readable typography', 'Mobile‑first experience', 'Privacy‑respecting defaults'].map((f, i) => (
-                  <li key={i} className="flex items-center gap-2"><CheckCircle2 className="size-4" /> {f}</li>
-                ))}
-              </ul>
-            </Card>
-            <Card className="p-6">
-              <div className="font-semibold">What you’ll track</div>
-              <p className="opacity-80 mt-1">Core stats that matter to producers—easy to scan, easy to use.</p>
-              <div className="mt-3 grid grid-cols-3 gap-3 text-sm">
-                {[
-                  { k: 'Revenue', v: '$4.3k' },
-                  { k: 'Top city', v: 'LA' },
-                  { k: 'New fans', v: '621' },
-                  { k: 'Conversions', v: '3.2%' },
-                  { k: 'Repeat buyers', v: '41%' },
-                  { k: 'Best day', v: 'Fri' }
-                ].map((m, i) => (
-                  <div key={i} className="rounded-lg border border-black/10 bg-white/60 p-3">
-                    <div className="text-[11px] uppercase tracking-wide opacity-70">{m.k}</div>
-                    <div className="font-semibold mt-0.5">{m.v}</div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Pricing */}
-      <Section id="pricing" className="py-12 md:py-16">
-        <Container>
-          <div className="text-center">
-            <h2 className="text-2xl md:text-3xl font-heading font-semibold">Fair pricing for independents</h2>
-            <p className="mt-2 opacity-80">Start free and upgrade when it feels right.</p>
-          </div>
-          <div className="mt-8 grid md:grid-cols-3 gap-6">
-            {[
-              { name: 'Free', price: '$0', notes: ['1 platform', 'Basic stats'] },
-              { name: 'Pro', price: '$19/mo', notes: ['Multi‑platform', 'Deeper insights'] },
-              { name: 'Studio', price: '$39/mo', notes: ['Exports & alerts', 'Priority support'] }
-            ].map((p, i) => (
-              <Card key={i} className="p-6 text-center">
-                <div className="text-lg font-semibold">{p.name}</div>
-                <div className="text-3xl font-bold mt-1" style={{ color: palette.charcoal }}>{p.price}</div>
-                <ul className="mt-4 space-y-2 text-sm opacity-80">
-                  {p.notes.map((n, j) => (
-                    <li key={j} className="flex items-center gap-2 justify-center"><CheckCircle2 className="size-4" /> {n}</li>
-                  ))}
-                </ul>
-                <a href="#cta" className="mt-6 inline-flex items-center justify-center rounded-full px-5 py-2 font-semibold" style={{ background: palette.coral, color: palette.charcoal }}>
-                  Choose {p.name}
-                </a>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* CTA */}
-      <Section id="cta" className="py-16">
-        <Container className="text-center">
-          <div className="inline-flex items-center justify-center rounded-full px-3 py-1 bg-white/60 border border-black/10 text-xs">
-            Made by producers, for producers
-          </div>
-          <h3 className="mt-3 text-3xl md:text-4xl font-heading font-bold">Grow your catalog with calm, useful insights</h3>
-          <p className="mt-2 opacity-80 max-w-2xl mx-auto">Connect once. We quietly keep score so you can focus on the craft.</p>
-          <div className="mt-6 flex items-center justify-center gap-3">
-            <a href="#" className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-base font-semibold" style={{ background: palette.coral, color: palette.charcoal }}>
-              Start free <ArrowRight className="size-4" />
-            </a>
-            <a href="#pricing" className="inline-flex items-center gap-2 rounded-full px-6 py-3 border border-black/10 bg-white/60">
-              Compare plans
-            </a>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Footer */}
-      <footer className="border-t border-black/10 py-10">
-        <Container className="grid md:grid-cols-3 gap-8">
-          <div>
-            <div className="flex items-center gap-3">
-              <div className="size-8 rounded-md" style={{ background: palette.coral }} />
-              <span className="font-semibold">BeatAlytics</span>
-            </div>
-            <p className="mt-3 text-sm opacity-80">A warm, simple home for producer analytics.</p>
-          </div>
-          <div>
-            <div className="font-semibold">Company</div>
-            <ul className="mt-2 text-sm opacity-80 space-y-1">
-              <li><a href="#" className="hover:opacity-100">Contact</a></li>
-              <li><a href="#" className="hover:opacity-100">Privacy</a></li>
-            </ul>
-          </div>
-          <div>
-            <div className="font-semibold">Resources</div>
-            <ul className="mt-2 text-sm opacity-80 space-y-1">
-              <li><a href="#" className="hover:opacity-100">Docs</a></li>
-              <li><a href="#" className="hover:opacity-100">Status</a></li>
-            </ul>
-          </div>
-        </Container>
-        <Container className="mt-8 text-center text-xs opacity-70">© {new Date().getFullYear()} BeatAlytics</Container>
-      </footer>
+    <div className="min-h-screen" style={{ background: 'var(--muted-sand)' }}>
+      <Header />
+      <Hero />
+      <PadsGrid />
+      <GentleStats />
+      <Pricing />
+      <FinalCTA />
+      <Footer />
     </div>
   )
 }
