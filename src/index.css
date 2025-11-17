@@ -1,53 +1,82 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Pastel Creative Theme Tokens */
 @layer base {
   :root {
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* Brand Fonts */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+    /* Primary Palette */
+    --soft-coral: #F7AFA7;
+    --muted-sand: #E7D8C9;
+    --warm-charcoal: #2B2B2B;
+
+    /* Secondary Pastels */
+    --pastel-mint: #CDEFE2;
+    --pale-sage: #B7C9A9;
+    --soft-peach: #FFD9C2;
+    --muted-teal: #91C3BC;
+
+    /* Accents */
+    --warm-gold: #D7A96B;
+    --soft-terracotta: #D68D6A;
   }
 
-  html {
-    font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
+  html { font-family: var(--font-sans); }
 
   body {
-    @apply antialiased bg-[#0B0B0F];
+    color: var(--warm-charcoal);
+    background: var(--muted-sand);
+    @apply antialiased;
   }
 }
 
 @layer utilities {
+  /* Heading font helper */
   .font-heading { font-family: var(--font-heading); }
 
-  .glow { box-shadow: 0 0 0 0 rgba(57,255,136,0.0); transition: box-shadow .25s ease; }
-  .glow:hover { box-shadow: 0 0 32px 4px rgba(57,255,136,0.35); }
+  /* Subtle grain texture overlay */
+  .grain {
+    position: relative;
+  }
+  .grain:before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background-image: url('data:image/svg+xml;utf8,\
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">\
+        <filter id="n">\
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>\
+          <feColorMatrix type="saturate" values="0"/>\
+          <feComponentTransfer>\
+            <feFuncA type="table" tableValues="0 0.035"/>\
+          </feComponentTransfer>\
+        </filter>\
+        <rect width="100%" height="100%" filter="url(%23n)" opacity="0.6"/>\
+      </svg>');
+    opacity: .35;
+  }
 
-  /* Equalizer bars */
-  .animate-eq { animation: eq 1.25s ease-in-out infinite alternate; }
-  .animate-eq:nth-child(3n) { animation-duration: 1.05s; }
-  .animate-eq:nth-child(4n) { animation-duration: 1.5s; }
-  .animate-eq:nth-child(5n) { animation-duration: 0.9s; }
-  @keyframes eq { from { transform: scaleY(0.4); } to { transform: scaleY(1); } }
+  /* Soft shadow + rounded helpers */
+  .soft-card { @apply rounded-xl; box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+  .soft-card-lg { @apply rounded-2xl; box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
 
-  /* Spinning vinyl */
-  .animate-spin-slow { animation: spin 12s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  /* Gentle motion */
+  .fade-in { animation: fade-in .8s ease-out both; }
+  @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* Drawn waveform */
-  .animate-draw { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: draw 2.8s ease forwards; }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-  .path-glow { filter: drop-shadow(0 0 14px rgba(57,255,136,0.35)); }
+  .hover-lift { transition: transform .25s ease, box-shadow .25s ease; }
+  .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
 
-  /* Rising bars subtle float */
-  .animate-rise { animation: rise 2.2s ease-in-out infinite; }
-  .animate-rise:nth-child(odd) { animation-duration: 1.8s; }
-  @keyframes rise { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6%); } }
+  /* Pastel gradient helpers */
+  .bg-sunset { background: linear-gradient(135deg, var(--soft-peach), var(--pastel-mint)); }
+  .bg-sage { background: linear-gradient(135deg, #F4EADD, var(--pale-sage)); }
+  .bg-mint { background: linear-gradient(135deg, #F6FFF9, var(--pastel-mint)); }
 
-  /* Marquee */
-  .marquee { width: max-content; animation: marquee 18s linear infinite; }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  /* Minimal chart line styling */
+  .line-glow { filter: drop-shadow(0 2px 6px rgba(0,0,0,.08)); }
 }
